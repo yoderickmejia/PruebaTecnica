@@ -8,7 +8,7 @@ from slowapi.errors import RateLimitExceeded
 from app.config import settings
 from app.database import Base, engine
 from app.limiter import limiter
-import app.models  # noqa: F401 — ensure models are registered before create_all
+import app.models  
 from app.routes.search import router as search_router
 from app.routes.articles import router as article_router
 from app.routes.auth import router as auth_router

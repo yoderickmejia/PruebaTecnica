@@ -2,7 +2,7 @@ from celery import Celery
 
 from app.config import settings
 
-# Azure Redis Cache uses rediss:// (SSL on port 6380)
+
 _ssl = settings.redis_url.startswith("rediss://")
 _broker_transport_opts = {"ssl_cert_reqs": None} if _ssl else {}
 
