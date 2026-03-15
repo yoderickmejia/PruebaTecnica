@@ -53,13 +53,9 @@ export async function callBackend(
 
   if (requireAuth && !accessToken) {
     const refreshToken = cookieStore.get('refresh_token')?.value
-    if (!refreshToken) {
-      return { data: { detail: 'No autenticado' }, status: 401 }
-    }
+    if (!refreshToken) return { data: { detail: 'No autenticado' }, status: 401 }
     const tokens = await tryRefresh(refreshToken)
-    if (!tokens) {
-      return { data: { detail: 'Sesión expirada' }, status: 401 }
-    }
+    if (!tokens) return { data: { detail: 'Sesión expirada' }, status: 401 }
     const res = await fetch(`${BACKEND_URL}${path}`, {
       ...options,
       headers: {
@@ -101,9 +97,7 @@ export function buildResponse(
   result: { data: unknown; status: number; newTokens?: { access_token: string; refresh_token: string } }
 ): NextResponse {
   const response = NextResponse.json(result.data, { status: result.status })
-  if (result.newTokens) {
-    applyCookiesToResponse(response, result.newTokens)
-  }
+  if (result.newTokens) applyCookiesToResponse(response, result.newTokens)
   return response
 }
 

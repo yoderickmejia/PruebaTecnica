@@ -1,180 +1,196 @@
 'use client'
 
 import { use } from 'react'
-import Link from 'next/link'
-import { ArrowLeft, ExternalLink, Bookmark, BookmarkCheck, Loader2, BarChart2, Hash } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Skeleton } from '@/components/ui/skeleton'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
-import { useArticle } from '@/hooks/use-article'
-import { useSavedArticles, useSaveArticle } from '@/hooks/use-saved-articles'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { ExternalLink, Bookmark, BookmarkCheck, Hash, FileText, ArrowLeft, AlertCircle, Lock } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 import { useAuth } from '@/components/providers/auth-provider'
+import type { ArticleDetail, SavedArticle } from '@/types'
+
+function Skeleton({ className }: { className?: string }) {
+  return <div className={`animate-pulse rounded-lg bg-muted ${className}`} />
+}
 
 export default function ArticlePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
+  const router = useRouter()
   const { user } = useAuth()
-  const { data: article, isLoading, error } = useArticle(id)
-  const { data: savedArticles } = useSavedArticles(!!user)
-  const { mutate: saveArticle, isPending: isSaving } = useSaveArticle()
+  const queryClient = useQueryClient()
 
-  const savedEntry = savedArticles?.find((a) => a.wikipedia_id === id)
+  const { data: article, isLoading, error } = useQuery<ArticleDetail>({
+    queryKey: ['article', id],
+    queryFn: async () => {
+      const res = await fetch(`/api/articles/${id}`)
+      if (!res.ok) {
+        const err = await res.json()
+        throw new Error(err.detail || 'Error al cargar el artículo')
+      }
+      return res.json()
+    },
+    enabled: !!user,
+    staleTime: 10 * 60 * 1000,
+  })
 
-  const handleSave = () => {
-    if (!article) return
-    saveArticle({
-      title: article.title,
-      wikipedia_id: id,
-      url: article.wikipedia_url,
-      summary: article.summary,
-    })
+  const savedArticles = useQuery<SavedArticle[]>({
+    queryKey: ['saved'],
+    queryFn: async () => {
+      const res = await fetch('/api/saved')
+      if (!res.ok) return []
+      return res.json()
+    },
+    enabled: !!user,
+    staleTime: 5 * 60 * 1000,
+  })
+
+  const isSaved = savedArticles.data?.some(a => a.wikipedia_id === id)
+
+  const saveMutation = useMutation({
+    mutationFn: async () => {
+      const res = await fetch('/api/saved', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: article!.title,
+          wikipedia_id: id,
+          url: article!.wikipedia_url,
+          summary: article!.summary,
+        }),
+      })
+      if (!res.ok) throw new Error('Error al guardar')
+      return res.json()
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['saved'] })
+      toast.success('Artículo guardado')
+    },
+    onError: () => toast.error('Error al guardar el artículo'),
+  })
+
+  if (!user) {
+    return (
+      <div className="container max-w-2xl px-4 py-20 text-center">
+        <div className="h-16 w-16 rounded-2xl bg-muted flex items-center justify-center mx-auto mb-4">
+          <Lock className="h-8 w-8 text-muted-foreground" />
+        </div>
+        <h2 className="text-xl font-semibold text-foreground mb-2">Inicia sesión para ver este artículo</h2>
+        <p className="text-muted-foreground mb-6">Necesitas una cuenta para acceder al análisis completo</p>
+        <button
+          onClick={() => router.push('/login')}
+          className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-xl transition-all"
+        >
+          Iniciar sesión
+        </button>
+      </div>
+    )
   }
 
   if (isLoading) {
     return (
-      <div className="container py-8 max-w-3xl">
-        <Skeleton className="h-8 w-24 mb-6" />
-        <Skeleton className="h-10 w-3/4 mb-2" />
-        <Skeleton className="h-5 w-1/4 mb-8" />
-        <div className="space-y-3">
-          <Skeleton className="h-4 w-full" />
-          <Skeleton className="h-4 w-full" />
-          <Skeleton className="h-4 w-5/6" />
-          <Skeleton className="h-4 w-4/5" />
+      <div className="container max-w-2xl px-4 py-10">
+        <Skeleton className="h-4 w-24 mb-8" />
+        <Skeleton className="h-8 w-3/4 mb-4" />
+        <Skeleton className="h-4 w-full mb-2" />
+        <Skeleton className="h-4 w-full mb-2" />
+        <Skeleton className="h-4 w-5/6 mb-8" />
+        <div className="flex gap-2 mb-6">
+          {[...Array(5)].map((_, i) => <Skeleton key={i} className="h-7 w-20 rounded-full" />)}
         </div>
+        <Skeleton className="h-12 w-full rounded-xl" />
       </div>
     )
   }
 
-  if (error) {
+  if (error || !article) {
     return (
-      <div className="container py-8 max-w-3xl">
-        <Button variant="ghost" asChild className="mb-6 -ml-2">
-          <Link href="javascript:history.back()">
-            <ArrowLeft className="h-4 w-4 mr-1" />
-            Volver
-          </Link>
-        </Button>
-        <Alert variant="destructive">
-          <AlertDescription>
-            {error.message === 'No autenticado'
-              ? 'Debes iniciar sesión para ver los detalles del artículo.'
-              : error.message}
-          </AlertDescription>
-        </Alert>
-        {error.message === 'No autenticado' && (
-          <div className="mt-4 flex gap-3">
-            <Button asChild>
-              <Link href="/login">Iniciar sesión</Link>
-            </Button>
-            <Button variant="outline" asChild>
-              <Link href="/register">Registrarse</Link>
-            </Button>
-          </div>
-        )}
+      <div className="container max-w-2xl px-4 py-20 text-center">
+        <div className="h-16 w-16 rounded-2xl bg-destructive/10 flex items-center justify-center mx-auto mb-4">
+          <AlertCircle className="h-8 w-8 text-destructive" />
+        </div>
+        <h2 className="text-xl font-semibold text-foreground mb-2">No se pudo cargar el artículo</h2>
+        <p className="text-sm text-muted-foreground mb-6">{(error as Error)?.message}</p>
+        <button onClick={() => router.back()} className="px-4 py-2 bg-card border border-border hover:border-indigo-500/40 text-foreground rounded-xl transition-all text-sm">
+          Volver
+        </button>
       </div>
     )
   }
-
-  if (!article) return null
 
   return (
-    <div className="container py-8 max-w-3xl">
-      {/* Back button */}
-      <Button variant="ghost" size="sm" onClick={() => window.history.back()} className="-ml-2 mb-6">
-        <ArrowLeft className="h-4 w-4 mr-1" />
+    <div className="container max-w-2xl px-4 py-10">
+      {/* Back */}
+      <button
+        onClick={() => router.back()}
+        className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
+      >
+        <ArrowLeft className="h-4 w-4" />
         Volver
-      </Button>
+      </button>
 
-      {/* Title + actions */}
-      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
-        <h1 className="text-3xl font-bold leading-tight">{article.title}</h1>
-        <div className="flex items-center gap-2 shrink-0">
-          <Button variant="outline" size="sm" asChild>
-            <a href={article.wikipedia_url} target="_blank" rel="noopener noreferrer">
-              <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
-              Wikipedia
-            </a>
-          </Button>
-          {user ? (
-            savedEntry ? (
-              <Button variant="secondary" size="sm" disabled>
-                <BookmarkCheck className="h-3.5 w-3.5 mr-1.5" />
-                Guardado
-              </Button>
-            ) : (
-              <Button size="sm" onClick={handleSave} disabled={isSaving}>
-                {isSaving ? (
-                  <Loader2 className="h-3.5 w-3.5 animate-spin mr-1.5" />
-                ) : (
-                  <Bookmark className="h-3.5 w-3.5 mr-1.5" />
-                )}
-                Guardar
-              </Button>
-            )
-          ) : (
-            <Button variant="outline" size="sm" asChild>
-              <Link href="/login">
-                <Bookmark className="h-3.5 w-3.5 mr-1.5" />
-                Guardar
-              </Link>
-            </Button>
-          )}
+      {/* Title */}
+      <h1 className="text-3xl font-bold text-foreground mb-6 leading-tight">{article.title}</h1>
+
+      {/* Stats */}
+      <div className="flex flex-wrap gap-4 mb-6">
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-card border border-border text-sm text-muted-foreground">
+          <FileText className="h-4 w-4 text-indigo-400" />
+          <span className="font-medium text-foreground">{article.word_count.toLocaleString()}</span> palabras
         </div>
       </div>
 
-      <Separator className="mb-6" />
-
       {/* Summary */}
-      <Card className="mb-6">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-lg">Resumen</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground leading-relaxed">{article.summary}</p>
-        </CardContent>
-      </Card>
+      <div className="p-5 rounded-2xl bg-card border border-border mb-6">
+        <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">Resumen</h2>
+        <p className="text-foreground leading-relaxed">{article.summary}</p>
+      </div>
 
-      {/* Analysis */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base flex items-center gap-2">
-              <BarChart2 className="h-4 w-4 text-primary" />
-              Análisis del texto
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Total de palabras</span>
-              <span className="font-semibold">{article.word_count.toLocaleString()}</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Palabras únicas (top)</span>
-              <span className="font-semibold">{article.top_words.length}</span>
-            </div>
-          </CardContent>
-        </Card>
+      {/* Top keywords */}
+      {article.top_words.length > 0 && (
+        <div className="mb-8">
+          <div className="flex items-center gap-2 mb-3">
+            <Hash className="h-4 w-4 text-indigo-400" />
+            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Palabras clave</h2>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {article.top_words.map((word) => (
+              <span
+                key={word}
+                className="px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-sm font-medium"
+              >
+                {word}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
 
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base flex items-center gap-2">
-              <Hash className="h-4 w-4 text-primary" />
-              Palabras clave
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-1.5">
-              {article.top_words.map((word) => (
-                <Badge key={word} variant="secondary" className="text-xs">
-                  {word}
-                </Badge>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+      {/* Actions */}
+      <div className="flex flex-col sm:flex-row gap-3">
+        <a
+          href={article.wikipedia_url}
+          target="_blank"
+          rel="noreferrer"
+          className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-card border border-border hover:border-indigo-500/40 hover:bg-indigo-500/5 text-foreground font-medium transition-all text-sm"
+        >
+          <ExternalLink className="h-4 w-4 text-indigo-400" />
+          Ver en Wikipedia
+        </a>
+
+        <button
+          onClick={() => !isSaved && saveMutation.mutate()}
+          disabled={isSaved || saveMutation.isPending}
+          className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium transition-all text-sm ${
+            isSaved
+              ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 cursor-default'
+              : 'bg-indigo-600 hover:bg-indigo-500 text-white border border-transparent disabled:opacity-60'
+          }`}
+        >
+          {isSaved ? (
+            <><BookmarkCheck className="h-4 w-4" /> Guardado</>
+          ) : (
+            <><Bookmark className="h-4 w-4" /> {saveMutation.isPending ? 'Guardando...' : 'Guardar artículo'}</>
+          )}
+        </button>
       </div>
     </div>
   )

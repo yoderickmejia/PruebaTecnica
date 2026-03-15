@@ -1,10 +1,8 @@
 import { NextRequest } from 'next/server'
 import { callBackend, buildResponse } from '@/lib/backend'
 
-export async function GET(request: NextRequest) {
-  const skip = request.nextUrl.searchParams.get('skip') || '0'
-  const limit = request.nextUrl.searchParams.get('limit') || '20'
-  const result = await callBackend(`/api/v1/saved_articles?skip=${skip}&limit=${limit}`, {}, true)
+export async function GET() {
+  const result = await callBackend('/api/v1/saved_articles', {}, true)
   return buildResponse(result)
 }
 

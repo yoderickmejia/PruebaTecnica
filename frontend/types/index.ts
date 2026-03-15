@@ -28,14 +28,3 @@ export interface SavedArticle {
   summary: string | null
   created_at: string
 }
-
-export interface SaveArticlePayload {
-  title: string
-  wikipedia_id: string
-  url: string
-  summary?: string
-}
-
-export interface ApiError {
-  detail: string
-}

@@ -1,5 +1,4 @@
 'use client'
-
 import { createContext, useContext } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
@@ -19,7 +18,6 @@ const AuthContext = createContext<AuthContextValue | null>(null)
 
 async function fetchMe(): Promise<User | null> {
   const res = await fetch('/api/auth/me')
-  if (res.status === 401) return null
   if (!res.ok) return null
   return res.json()
 }
@@ -47,26 +45,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         throw new Error(err.detail || 'Error al iniciar sesión')
       }
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['user'] })
-      toast.success('Sesión iniciada correctamente')
+    onSuccess: async () => {
+      await queryClient.refetchQueries({ queryKey: ['user'] })
+      toast.success('Sesión iniciada')
       router.push('/')
     },
-    onError: (error: Error) => {
-      toast.error(error.message)
-    },
+    onError: (error: Error) => toast.error(error.message),
   })
 
   const registerMutation = useMutation({
-    mutationFn: async ({
-      email,
-      username,
-      password,
-    }: {
-      email: string
-      username: string
-      password: string
-    }) => {
+    mutationFn: async ({ email, username, password }: { email: string; username: string; password: string }) => {
       const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -78,12 +66,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     },
     onSuccess: () => {
-      toast.success('Cuenta creada correctamente. Inicia sesión.')
+      toast.success('Cuenta creada. Inicia sesión.')
       router.push('/login')
     },
-    onError: (error: Error) => {
-      toast.error(error.message)
-    },
+    onError: (error: Error) => toast.error(error.message),
   })
 
   const logoutMutation = useMutation({
@@ -92,7 +78,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     },
     onSuccess: () => {
       queryClient.setQueryData(['user'], null)
-      queryClient.invalidateQueries({ queryKey: ['saved'] })
+      queryClient.clear()
       toast.success('Sesión cerrada')
       router.push('/')
     },
@@ -105,8 +91,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         isLoading,
         isAuthenticated: !!user,
         login: (email, password) => loginMutation.mutateAsync({ email, password }),
-        register: (email, username, password) =>
-          registerMutation.mutateAsync({ email, username, password }),
+        register: (email, username, password) => registerMutation.mutateAsync({ email, username, password }),
         logout: () => logoutMutation.mutateAsync(),
       }}
     >
