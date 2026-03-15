@@ -4,18 +4,18 @@
 
 @layer base {
   :root {
-    --background: 0 0% 2%;
-    --foreground: 0 0% 96%;
+    --background: 0 0% 0%;
+    --foreground: 0 0% 95%;
 
-    --card: 0 0% 5%;
-    --card-foreground: 0 0% 96%;
+    --card: 0 0% 4%;
+    --card-foreground: 0 0% 95%;
 
-    --border: 0 0% 12%;
+    --border: 0 0% 11%;
 
     --primary: 0 72% 51%;
     --primary-foreground: 0 0% 100%;
 
-    --muted: 0 0% 8%;
+    --muted: 0 0% 7%;
     --muted-foreground: 0 0% 45%;
 
     --accent: 0 72% 51%;
@@ -32,24 +32,51 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-black text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 
   ::-webkit-scrollbar {
-    width: 6px;
+    width: 5px;
   }
 
   ::-webkit-scrollbar-track {
-    background: hsl(0 0% 2%);
+    background: transparent;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: hsl(0 0% 14%);
+    background: hsl(0 0% 15%);
     border-radius: 3px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
     background: hsl(0 72% 51%);
   }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(0.8); }
+  50%       { opacity: 1;   transform: scale(1.2); }
+}
+
+@keyframes twinkle-slow {
+  0%, 100% { opacity: 0.1; }
+  50%       { opacity: 0.7; }
+}
+
+@keyframes shoot {
+  0%   { transform: translateX(0)     translateY(0)    scaleX(0); opacity: 0; }
+  5%   { opacity: 1; transform: scaleX(1); }
+  80%  { opacity: 0.6; }
+  100% { transform: translateX(-600px) translateY(600px) scaleX(1); opacity: 0; }
+}
+
+@keyframes nebula-pulse {
+  0%, 100% { opacity: 0.12; transform: scale(1); }
+  50%       { opacity: 0.22; transform: scale(1.08); }
+}
+
+@keyframes nebula-pulse-alt {
+  0%, 100% { opacity: 0.08; transform: scale(1.05); }
+  50%       { opacity: 0.18; transform: scale(0.95); }
 }

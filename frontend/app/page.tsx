@@ -15,78 +15,90 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col">
-      {/* Hero */}
-      <section className="relative flex flex-col items-center justify-center px-4 py-24 md:py-36 text-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-red-950/20 via-background to-background pointer-events-none" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-red-600/8 rounded-full blur-3xl pointer-events-none" />
+      {/* ── Hero ── */}
+      <section className="relative flex flex-col items-center justify-center px-4 py-28 md:py-40 text-center">
+        {/* Extra red glow behind the search */}
+        <div
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[700px] h-[200px] pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse, rgba(185,28,28,0.18) 0%, transparent 70%)' }}
+        />
 
         <div className="relative z-10 w-full max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-medium mb-6">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-medium mb-7 backdrop-blur-sm">
             <BookOpen className="h-3.5 w-3.5" />
             Powered by Wikipedia
           </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground mb-5 leading-tight">
-            Explora el conocimiento{' '}
-            <span className="text-red-500">
-              sin límites
-            </span>
+          {/* Heading */}
+          <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight text-white mb-6 leading-[1.08]">
+            Explora el<br />
+            <span className="text-red-500">universo</span>{' '}
+            <span className="text-white/70">del saber</span>
           </h1>
 
-          <p className="text-lg text-muted-foreground max-w-xl mx-auto mb-10">
-            Busca millones de artículos de Wikipedia, obtén resúmenes inteligentes y guarda lo que más te interesa.
+          <p className="text-base sm:text-lg text-white/50 max-w-lg mx-auto mb-12 leading-relaxed">
+            Millones de artículos de Wikipedia. Resúmenes inteligentes, análisis de texto y todo lo que necesitas saber.
           </p>
 
+          {/* Search bar */}
           <form onSubmit={handleSubmit} className="relative w-full max-w-2xl mx-auto">
             <div className="relative flex items-center">
-              <Search className="absolute left-4 h-5 w-5 text-muted-foreground pointer-events-none" />
+              <Search className="absolute left-5 h-5 w-5 text-white/30 pointer-events-none" />
               <input
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder='Busca cualquier tema: "Inteligencia artificial", "Python"...'
-                className="w-full h-14 pl-12 pr-32 rounded-2xl bg-card border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-red-500/40 focus:border-red-500/40 text-base transition-all"
+                placeholder='"Agujero negro", "Relatividad", "Galaxia..."'
+                className="w-full h-16 pl-14 pr-36 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-white/25 focus:outline-none focus:ring-2 focus:ring-red-500/40 focus:border-red-500/30 text-base backdrop-blur-md transition-all"
                 autoFocus
               />
               <button
                 type="submit"
                 disabled={!query.trim()}
-                className="absolute right-2 flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-500 disabled:opacity-30 disabled:cursor-not-allowed text-white text-sm font-medium rounded-xl transition-all"
+                className="absolute right-2 flex items-center gap-2 px-5 py-3 bg-red-600 hover:bg-red-500 disabled:opacity-30 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-xl transition-all"
               >
                 Buscar
                 <ArrowRight className="h-4 w-4" />
               </button>
             </div>
           </form>
+
+          <p className="mt-5 text-xs text-white/25">
+            Prueba: "Agujero negro", "Materia oscura", "Big Bang"
+          </p>
         </div>
       </section>
 
-      {/* Features */}
-      <section className="border-t border-border">
-        <div className="container max-w-4xl py-16 grid grid-cols-1 sm:grid-cols-3 gap-6">
+      {/* ── Features ── */}
+      <section className="border-t border-white/5">
+        <div className="container max-w-4xl py-16 grid grid-cols-1 sm:grid-cols-3 gap-5">
           {[
             {
               icon: Zap,
               title: 'Análisis instantáneo',
-              desc: 'Resúmenes automáticos y palabras clave de cualquier artículo al instante.',
+              desc: 'Resúmenes y palabras clave de cualquier artículo al instante.',
             },
             {
               icon: Bookmark,
-              title: 'Guarda tus artículos',
+              title: 'Guarda artículos',
               desc: 'Crea tu biblioteca personal y accede a ella cuando quieras.',
             },
             {
               icon: Globe,
               title: 'Fuente confiable',
-              desc: 'Datos directamente de Wikipedia con enlace al artículo original.',
+              desc: 'Datos de Wikipedia con enlace directo al artículo original.',
             },
           ].map(({ icon: Icon, title, desc }) => (
-            <div key={title} className="flex flex-col items-center text-center gap-3 p-6 rounded-2xl bg-card border border-border hover:border-red-500/30 transition-colors">
-              <div className="h-12 w-12 rounded-xl bg-red-500/10 flex items-center justify-center">
-                <Icon className="h-6 w-6 text-red-500" />
+            <div
+              key={title}
+              className="flex flex-col items-center text-center gap-3 p-6 rounded-2xl border border-white/5 bg-white/[0.02] hover:border-red-500/20 hover:bg-white/[0.04] transition-all backdrop-blur-sm"
+            >
+              <div className="h-11 w-11 rounded-xl bg-red-500/10 border border-red-500/15 flex items-center justify-center">
+                <Icon className="h-5 w-5 text-red-500" />
               </div>
-              <h3 className="font-semibold text-foreground">{title}</h3>
-              <p className="text-sm text-muted-foreground">{desc}</p>
+              <h3 className="font-semibold text-white/90 text-sm">{title}</h3>
+              <p className="text-xs text-white/40 leading-relaxed">{desc}</p>
             </div>
           ))}
         </div>
