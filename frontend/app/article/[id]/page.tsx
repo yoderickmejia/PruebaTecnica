@@ -77,7 +77,7 @@ export default function ArticlePage({ params }: { params: Promise<{ id: string }
         <p className="text-muted-foreground mb-6">Necesitas una cuenta para acceder al análisis completo</p>
         <button
           onClick={() => router.push('/login')}
-          className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-xl transition-all"
+          className="px-6 py-2.5 bg-red-600 hover:bg-red-500 text-white font-medium rounded-xl transition-all"
         >
           Iniciar sesión
         </button>
@@ -104,12 +104,12 @@ export default function ArticlePage({ params }: { params: Promise<{ id: string }
   if (error || !article) {
     return (
       <div className="container max-w-2xl px-4 py-20 text-center">
-        <div className="h-16 w-16 rounded-2xl bg-destructive/10 flex items-center justify-center mx-auto mb-4">
-          <AlertCircle className="h-8 w-8 text-destructive" />
+        <div className="h-16 w-16 rounded-2xl bg-red-500/10 flex items-center justify-center mx-auto mb-4">
+          <AlertCircle className="h-8 w-8 text-red-500" />
         </div>
         <h2 className="text-xl font-semibold text-foreground mb-2">No se pudo cargar el artículo</h2>
         <p className="text-sm text-muted-foreground mb-6">{(error as Error)?.message}</p>
-        <button onClick={() => router.back()} className="px-4 py-2 bg-card border border-border hover:border-indigo-500/40 text-foreground rounded-xl transition-all text-sm">
+        <button onClick={() => router.back()} className="px-4 py-2 bg-card border border-border hover:border-red-500/30 text-foreground rounded-xl transition-all text-sm">
           Volver
         </button>
       </div>
@@ -118,7 +118,6 @@ export default function ArticlePage({ params }: { params: Promise<{ id: string }
 
   return (
     <div className="container max-w-2xl px-4 py-10">
-      {/* Back */}
       <button
         onClick={() => router.back()}
         className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
@@ -127,35 +126,31 @@ export default function ArticlePage({ params }: { params: Promise<{ id: string }
         Volver
       </button>
 
-      {/* Title */}
       <h1 className="text-3xl font-bold text-foreground mb-6 leading-tight">{article.title}</h1>
 
-      {/* Stats */}
       <div className="flex flex-wrap gap-4 mb-6">
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-card border border-border text-sm text-muted-foreground">
-          <FileText className="h-4 w-4 text-indigo-400" />
+          <FileText className="h-4 w-4 text-red-500" />
           <span className="font-medium text-foreground">{article.word_count.toLocaleString()}</span> palabras
         </div>
       </div>
 
-      {/* Summary */}
       <div className="p-5 rounded-2xl bg-card border border-border mb-6">
-        <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">Resumen</h2>
+        <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Resumen</h2>
         <p className="text-foreground leading-relaxed">{article.summary}</p>
       </div>
 
-      {/* Top keywords */}
       {article.top_words.length > 0 && (
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-3">
-            <Hash className="h-4 w-4 text-indigo-400" />
-            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Palabras clave</h2>
+            <Hash className="h-4 w-4 text-red-500" />
+            <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Palabras clave</h2>
           </div>
           <div className="flex flex-wrap gap-2">
             {article.top_words.map((word) => (
               <span
                 key={word}
-                className="px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-sm font-medium"
+                className="px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-medium"
               >
                 {word}
               </span>
@@ -164,15 +159,14 @@ export default function ArticlePage({ params }: { params: Promise<{ id: string }
         </div>
       )}
 
-      {/* Actions */}
       <div className="flex flex-col sm:flex-row gap-3">
         <a
           href={article.wikipedia_url}
           target="_blank"
           rel="noreferrer"
-          className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-card border border-border hover:border-indigo-500/40 hover:bg-indigo-500/5 text-foreground font-medium transition-all text-sm"
+          className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-card border border-border hover:border-red-500/30 hover:bg-red-500/5 text-foreground font-medium transition-all text-sm"
         >
-          <ExternalLink className="h-4 w-4 text-indigo-400" />
+          <ExternalLink className="h-4 w-4 text-red-500" />
           Ver en Wikipedia
         </a>
 
@@ -181,8 +175,8 @@ export default function ArticlePage({ params }: { params: Promise<{ id: string }
           disabled={isSaved || saveMutation.isPending}
           className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium transition-all text-sm ${
             isSaved
-              ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 cursor-default'
-              : 'bg-indigo-600 hover:bg-indigo-500 text-white border border-transparent disabled:opacity-60'
+              ? 'bg-white/5 border border-white/20 text-white cursor-default'
+              : 'bg-red-600 hover:bg-red-500 text-white border border-transparent disabled:opacity-60'
           }`}
         >
           {isSaved ? (

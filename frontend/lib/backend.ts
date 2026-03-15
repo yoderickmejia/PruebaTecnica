@@ -5,7 +5,7 @@ const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8000'
 
 const COOKIE_OPTS_ACCESS = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
+  secure: false,
   sameSite: 'lax' as const,
   maxAge: 60 * 30,
   path: '/',
@@ -13,7 +13,7 @@ const COOKIE_OPTS_ACCESS = {
 
 const COOKIE_OPTS_REFRESH = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
+  secure: false,
   sameSite: 'lax' as const,
   maxAge: 60 * 60 * 24 * 7,
   path: '/',

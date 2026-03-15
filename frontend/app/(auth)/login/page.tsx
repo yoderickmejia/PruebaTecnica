@@ -29,10 +29,9 @@ export default function LoginPage() {
   return (
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-sm">
-        {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-500/10 border border-indigo-500/20 mb-4">
-            <BookOpen className="h-7 w-7 text-indigo-400" />
+          <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-red-500/10 border border-red-500/20 mb-4">
+            <BookOpen className="h-7 w-7 text-red-500" />
           </div>
           <h1 className="text-2xl font-bold text-foreground">Bienvenido de vuelta</h1>
           <p className="text-sm text-muted-foreground mt-1">Inicia sesión en tu cuenta</p>
@@ -40,7 +39,7 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
-            <div className="px-4 py-3 rounded-xl bg-destructive/10 border border-destructive/30 text-sm text-red-400">
+            <div className="px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/30 text-sm text-red-400">
               {error}
             </div>
           )}
@@ -54,7 +53,7 @@ export default function LoginPage() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="correo@ejemplo.com"
               required
-              className="w-full h-11 px-4 rounded-xl bg-card border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all text-sm"
+              className="w-full h-11 px-4 rounded-xl bg-card border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-red-500/40 focus:border-red-500/40 transition-all text-sm"
             />
           </div>
 
@@ -68,7 +67,7 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
-                className="w-full h-11 px-4 pr-11 rounded-xl bg-card border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all text-sm"
+                className="w-full h-11 px-4 pr-11 rounded-xl bg-card border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-red-500/40 focus:border-red-500/40 transition-all text-sm"
               />
               <button
                 type="button"
@@ -83,7 +82,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full h-11 flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 text-white font-medium rounded-xl transition-all text-sm"
+            className="w-full h-11 flex items-center justify-center gap-2 bg-red-600 hover:bg-red-500 disabled:opacity-60 text-white font-medium rounded-xl transition-all text-sm"
           >
             {loading && <Loader2 className="h-4 w-4 animate-spin" />}
             {loading ? 'Ingresando...' : 'Iniciar sesión'}
@@ -92,7 +91,7 @@ export default function LoginPage() {
 
         <p className="text-center text-sm text-muted-foreground mt-6">
           ¿No tienes cuenta?{' '}
-          <Link href="/register" className="text-indigo-400 hover:text-indigo-300 font-medium transition-colors">
+          <Link href="/register" className="text-red-400 hover:text-red-300 font-medium transition-colors">
             Regístrate
           </Link>
         </p>

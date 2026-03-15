@@ -7,7 +7,7 @@ import { useAuth } from '@/components/providers/auth-provider'
 
 function PasswordRule({ ok, text }: { ok: boolean; text: string }) {
   return (
-    <span className={`flex items-center gap-1.5 text-xs ${ok ? 'text-emerald-400' : 'text-muted-foreground'}`}>
+    <span className={`flex items-center gap-1.5 text-xs ${ok ? 'text-red-400' : 'text-muted-foreground'}`}>
       {ok ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
       {text}
     </span>
@@ -47,8 +47,8 @@ export default function RegisterPage() {
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-500/10 border border-indigo-500/20 mb-4">
-            <BookOpen className="h-7 w-7 text-indigo-400" />
+          <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-red-500/10 border border-red-500/20 mb-4">
+            <BookOpen className="h-7 w-7 text-red-500" />
           </div>
           <h1 className="text-2xl font-bold text-foreground">Crear cuenta</h1>
           <p className="text-sm text-muted-foreground mt-1">Únete a Wikipedia Explorer</p>
@@ -56,7 +56,7 @@ export default function RegisterPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
-            <div className="px-4 py-3 rounded-xl bg-destructive/10 border border-destructive/30 text-sm text-red-400">
+            <div className="px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/30 text-sm text-red-400">
               {error}
             </div>
           )}
@@ -74,7 +74,7 @@ export default function RegisterPage() {
                 onChange={update(key)}
                 placeholder={placeholder}
                 required
-                className="w-full h-11 px-4 rounded-xl bg-card border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all text-sm"
+                className="w-full h-11 px-4 rounded-xl bg-card border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-red-500/40 focus:border-red-500/40 transition-all text-sm"
               />
             </div>
           ))}
@@ -89,7 +89,7 @@ export default function RegisterPage() {
                 onChange={update('password')}
                 placeholder="••••••••"
                 required
-                className="w-full h-11 px-4 pr-11 rounded-xl bg-card border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all text-sm"
+                className="w-full h-11 px-4 pr-11 rounded-xl bg-card border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-red-500/40 focus:border-red-500/40 transition-all text-sm"
               />
               <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors">
                 {showPass ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -107,7 +107,7 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading || !Object.values(rules).every(Boolean)}
-            className="w-full h-11 flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 text-white font-medium rounded-xl transition-all text-sm"
+            className="w-full h-11 flex items-center justify-center gap-2 bg-red-600 hover:bg-red-500 disabled:opacity-60 text-white font-medium rounded-xl transition-all text-sm"
           >
             {loading && <Loader2 className="h-4 w-4 animate-spin" />}
             {loading ? 'Creando cuenta...' : 'Crear cuenta'}
@@ -116,7 +116,7 @@ export default function RegisterPage() {
 
         <p className="text-center text-sm text-muted-foreground mt-6">
           ¿Ya tienes cuenta?{' '}
-          <Link href="/login" className="text-indigo-400 hover:text-indigo-300 font-medium transition-colors">
+          <Link href="/login" className="text-red-400 hover:text-red-300 font-medium transition-colors">
             Iniciar sesión
           </Link>
         </p>

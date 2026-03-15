@@ -56,8 +56,8 @@ export default function SavedPage() {
   return (
     <div className="container max-w-2xl px-4 py-10">
       <div className="flex items-center gap-3 mb-8">
-        <div className="h-10 w-10 rounded-xl bg-indigo-500/10 flex items-center justify-center">
-          <Bookmark className="h-5 w-5 text-indigo-400" />
+        <div className="h-10 w-10 rounded-xl bg-red-500/10 flex items-center justify-center">
+          <Bookmark className="h-5 w-5 text-red-500" />
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">Mis artículos</h1>
@@ -74,7 +74,7 @@ export default function SavedPage() {
           <p className="text-sm text-muted-foreground mb-6">Busca y guarda artículos para verlos aquí</p>
           <button
             onClick={() => router.push('/')}
-            className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-xl text-sm transition-all"
+            className="px-5 py-2.5 bg-red-600 hover:bg-red-500 text-white font-medium rounded-xl text-sm transition-all"
           >
             Explorar artículos
           </button>
@@ -84,13 +84,13 @@ export default function SavedPage() {
           {articles.map((article) => (
             <div
               key={article.id}
-              className="group p-5 rounded-2xl bg-card border border-border hover:border-indigo-500/30 transition-all"
+              className="group p-5 rounded-2xl bg-card border border-border hover:border-red-500/30 transition-all"
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1 min-w-0">
                   <button
                     onClick={() => router.push(`/article/${article.wikipedia_id}`)}
-                    className="font-semibold text-foreground hover:text-indigo-400 transition-colors text-left block truncate w-full"
+                    className="font-semibold text-foreground hover:text-red-400 transition-colors text-left block truncate w-full"
                   >
                     {article.title}
                   </button>
@@ -107,7 +107,7 @@ export default function SavedPage() {
                         href={article.url}
                         target="_blank"
                         rel="noreferrer"
-                        className="flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 transition-colors"
+                        className="flex items-center gap-1 text-xs text-red-400 hover:text-red-300 transition-colors"
                       >
                         <ExternalLink className="h-3.5 w-3.5" />
                         Wikipedia

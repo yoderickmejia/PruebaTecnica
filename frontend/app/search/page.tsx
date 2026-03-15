@@ -46,8 +46,8 @@ function SearchResults({ q }: { q: string }) {
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
-        <div className="h-14 w-14 rounded-2xl bg-destructive/10 flex items-center justify-center mb-4">
-          <AlertCircle className="h-7 w-7 text-destructive" />
+        <div className="h-14 w-14 rounded-2xl bg-red-500/10 flex items-center justify-center mb-4">
+          <AlertCircle className="h-7 w-7 text-red-500" />
         </div>
         <h3 className="font-semibold text-foreground">Error al buscar</h3>
         <p className="text-sm text-muted-foreground mt-1">Intenta de nuevo más tarde</p>
@@ -73,12 +73,14 @@ function SearchResults({ q }: { q: string }) {
         <button
           key={result.id}
           onClick={() => router.push(`/article/${result.id}`)}
-          className="w-full text-left p-5 rounded-2xl bg-card border border-border hover:border-indigo-500/40 hover:bg-indigo-500/5 transition-all group"
+          className="w-full text-left p-5 rounded-2xl bg-card border border-border hover:border-red-500/40 hover:bg-red-500/5 transition-all group"
         >
-          <div className="flex items-start justify-between gap-3">
+          <div className="flex items-start gap-3">
+            <span className="shrink-0 text-xs text-muted-foreground font-mono pt-0.5">
+              {String(i + 1).padStart(2, '0')}
+            </span>
             <div className="min-w-0 flex-1">
-              <span className="text-xs text-muted-foreground font-medium">#{i + 1}</span>
-              <h3 className="font-semibold text-foreground group-hover:text-indigo-400 transition-colors mt-0.5 truncate">
+              <h3 className="font-semibold text-foreground group-hover:text-red-400 transition-colors truncate">
                 {result.title}
               </h3>
               <p className="text-sm text-muted-foreground mt-1.5 line-clamp-2">
@@ -106,7 +108,6 @@ function SearchPage() {
   return (
     <div className="min-h-[calc(100vh-4rem)] bg-background">
       <div className="container max-w-2xl px-4 py-8">
-        {/* Search input */}
         <form onSubmit={handleSubmit} className="relative mb-8">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none" />
           <input
@@ -114,14 +115,14 @@ function SearchPage() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Busca cualquier tema..."
-            className="w-full h-12 pl-12 pr-20 rounded-xl bg-card border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all"
+            className="w-full h-12 pl-12 pr-20 rounded-xl bg-card border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-red-500/40 focus:border-red-500/40 transition-all"
           />
           {query && (
             <button type="button" onClick={() => setQuery('')} className="absolute right-12 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground p-1">
               <X className="h-4 w-4" />
             </button>
           )}
-          <button type="submit" disabled={!query.trim()} className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 text-white text-sm font-medium rounded-lg transition-all">
+          <button type="submit" disabled={!query.trim()} className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-red-600 hover:bg-red-500 disabled:opacity-30 text-white text-sm font-medium rounded-lg transition-all">
             Buscar
           </button>
         </form>

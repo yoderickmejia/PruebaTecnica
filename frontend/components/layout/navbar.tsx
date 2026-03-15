@@ -19,15 +19,15 @@ export function Navbar() {
   ]
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-lg">
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/90 backdrop-blur-lg">
       <div className="container flex h-16 items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 font-bold text-lg" onClick={() => setMenuOpen(false)}>
-          <div className="h-8 w-8 rounded-lg bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center">
-            <BookOpen className="h-4 w-4 text-indigo-400" />
+          <div className="h-8 w-8 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center">
+            <BookOpen className="h-4 w-4 text-red-500" />
           </div>
-          <span className="hidden sm:inline bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">
-            Wiki Explorer
+          <span className="hidden sm:inline text-foreground">
+            Wiki <span className="text-red-500">Explorer</span>
           </span>
         </Link>
 
@@ -40,7 +40,7 @@ export function Navbar() {
               className={cn(
                 'flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
                 pathname === href || pathname.startsWith(href)
-                  ? 'bg-indigo-500/10 text-indigo-400'
+                  ? 'bg-red-500/10 text-red-400'
                   : 'text-muted-foreground hover:text-foreground hover:bg-card'
               )}
             >
@@ -58,9 +58,9 @@ export function Navbar() {
             <div className="relative">
               <button
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
-                className="flex items-center gap-2 px-2 py-1.5 rounded-xl bg-card border border-border hover:border-indigo-500/40 transition-all"
+                className="flex items-center gap-2 px-2 py-1.5 rounded-xl bg-card border border-border hover:border-red-500/30 transition-all"
               >
-                <div className="h-7 w-7 rounded-full bg-gradient-to-br from-indigo-500 to-violet-500 flex items-center justify-center text-white text-xs font-bold">
+                <div className="h-7 w-7 rounded-full bg-red-600 flex items-center justify-center text-white text-xs font-bold">
                   {user.username.charAt(0).toUpperCase()}
                 </div>
                 <span className="hidden sm:inline text-sm font-medium text-foreground">{user.username}</span>
@@ -71,16 +71,16 @@ export function Navbar() {
                 <>
                   <div className="fixed inset-0 z-10" onClick={() => setUserMenuOpen(false)} />
                   <div className="absolute right-0 top-full mt-2 w-56 rounded-2xl bg-card border border-border shadow-2xl overflow-hidden z-20">
-                    <div className="px-4 py-3 bg-muted/30 border-b border-border">
+                    <div className="px-4 py-3 border-b border-border">
                       <p className="text-sm font-semibold text-foreground">{user.username}</p>
                       <p className="text-xs text-muted-foreground truncate">{user.email}</p>
                     </div>
                     <div className="p-1.5">
                       <button
                         onClick={() => { router.push('/saved'); setUserMenuOpen(false) }}
-                        className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+                        className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                       >
-                        <Bookmark className="h-4 w-4 text-indigo-400" />
+                        <Bookmark className="h-4 w-4 text-red-500" />
                         Mis artículos
                       </button>
                     </div>
@@ -102,13 +102,12 @@ export function Navbar() {
               <Link href="/login" className="px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground transition-colors font-medium">
                 Iniciar sesión
               </Link>
-              <Link href="/register" className="px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium transition-all">
+              <Link href="/register" className="px-3 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-sm font-medium transition-all">
                 Registrarse
               </Link>
             </div>
           )}
 
-          {/* Mobile hamburger */}
           <button
             className="md:hidden p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-card transition-colors"
             onClick={() => setMenuOpen(!menuOpen)}
@@ -128,7 +127,7 @@ export function Navbar() {
               onClick={() => setMenuOpen(false)}
               className={cn(
                 'flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors',
-                pathname === href ? 'bg-indigo-500/10 text-indigo-400' : 'text-muted-foreground hover:text-foreground hover:bg-card'
+                pathname === href ? 'bg-red-500/10 text-red-400' : 'text-muted-foreground hover:text-foreground hover:bg-card'
               )}
             >
               <Icon className="h-4 w-4" />
@@ -148,7 +147,7 @@ export function Navbar() {
               <Link href="/login" onClick={() => setMenuOpen(false)} className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-card transition-colors">
                 Iniciar sesión
               </Link>
-              <Link href="/register" onClick={() => setMenuOpen(false)} className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium bg-indigo-600 hover:bg-indigo-500 text-white transition-all">
+              <Link href="/register" onClick={() => setMenuOpen(false)} className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium bg-red-600 hover:bg-red-500 text-white transition-all">
                 Registrarse
               </Link>
             </>
