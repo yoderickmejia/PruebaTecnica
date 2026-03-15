@@ -66,9 +66,6 @@ services:
         condition: service_healthy
     env_file:
       - ./backend/.env
-    environment:
-      POSTGRES_HOST: db
-      REDIS_URL: redis://redis:6379/0
     networks:
       - wiki_network
     command: celery -A app.worker.celery_app worker --loglevel=info --concurrency=2
@@ -79,9 +76,8 @@ services:
     container_name: wiki_frontend
     depends_on:
       - api
-    environment:
-      BACKEND_URL: http://api:8000
-      NEXT_PUBLIC_APP_NAME: Wikipedia Knowledge Explorer
+    env_file:
+      - ./backend/.env
     networks:
       - wiki_network
 
