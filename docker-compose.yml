@@ -73,11 +73,13 @@ services:
   frontend:
     build:
       context: ./frontend
+      args:
+        NEXT_PUBLIC_APP_NAME: "Wikipedia Knowledge Explorer"
     container_name: wiki_frontend
     depends_on:
       - api
-    env_file:
-      - ./backend/.env
+    environment:
+      BACKEND_URL: http://api:8000
     networks:
       - wiki_network
 

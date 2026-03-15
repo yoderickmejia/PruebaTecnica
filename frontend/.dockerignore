@@ -1,6 +1,7 @@
 .next
 node_modules
-.env*.local
+.env
+.env.*
 .git
 .gitignore
 README.md
