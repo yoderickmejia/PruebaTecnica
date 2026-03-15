@@ -33,7 +33,7 @@ export function Navbar() {
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-4">
           <Button variant="ghost" size="sm" asChild>
-            <Link href="/search" className="flex items-center gap-1">
+            <Link href="/" className="flex items-center gap-1">
               <Search className="h-4 w-4" />
               Buscar
             </Link>
@@ -124,7 +124,7 @@ export function Navbar() {
       {menuOpen && (
         <div className={cn('md:hidden border-t bg-background px-4 py-3 flex flex-col gap-2')}>
           <Button variant="ghost" size="sm" asChild className="justify-start" onClick={() => setMenuOpen(false)}>
-            <Link href="/search" className="flex items-center gap-2">
+            <Link href="/" className="flex items-center gap-2">
               <Search className="h-4 w-4" />
               Buscar
             </Link>

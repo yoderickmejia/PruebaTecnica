@@ -47,8 +47,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         throw new Error(err.detail || 'Error al iniciar sesión')
       }
     },
-    onSuccess: async () => {
-      await queryClient.refetchQueries({ queryKey: ['user'] })
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user'] })
       toast.success('Sesión iniciada correctamente')
       router.push('/')
     },

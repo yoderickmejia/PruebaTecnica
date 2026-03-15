@@ -1,6 +1,5 @@
-import Link from 'next/link'
-import { BookOpen, Zap, Bookmark, Globe, Search } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { BookOpen, Zap, Bookmark, Globe } from 'lucide-react'
+import { SearchBar } from '@/components/search/search-bar'
 
 export default function HomePage() {
   return (
@@ -17,12 +16,12 @@ export default function HomePage() {
         <p className="text-lg text-muted-foreground max-w-xl mb-10">
           Busca cualquier tema, obtén resúmenes inteligentes y análisis de texto de millones de artículos de Wikipedia.
         </p>
-        <Button size="lg" asChild className="gap-2">
-          <Link href="/search">
-            <Search className="h-5 w-5" />
-            Comenzar a buscar
-          </Link>
-        </Button>
+        <div className="w-full max-w-2xl">
+          <SearchBar size="lg" autoFocus />
+        </div>
+        <p className="mt-4 text-sm text-muted-foreground">
+          Prueba: &quot;Inteligencia artificial&quot;, &quot;Python&quot;, &quot;Historia de España&quot;
+        </p>
       </section>
 
       {/* Features */}
