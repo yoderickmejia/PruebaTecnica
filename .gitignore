@@ -9,8 +9,7 @@ __pycache__/
 dist/
 build/
 
-# Entorno
-.env
+
 
 # Node
 node_modules/
